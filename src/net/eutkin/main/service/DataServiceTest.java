@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class DataServiceTest implements IDataServiceTest {
-    private IDataDAOTest dataDAOTest;
+public class DataServiceTest<T> implements IDataServiceTest<T> {
+    private IDataDAOTest<T> dataDAOTest;
 
-    public void setDataDAOTest(IDataDAOTest dataDAOTest){
+    public void setDataDAOTest(IDataDAOTest<T> dataDAOTest){
         this.dataDAOTest = dataDAOTest;
     }
 
     @Override
     @Transactional
-    public void save(DataTS1 dataTS1){
-        dataDAOTest.save(dataTS1);
+    public void save(T obj){
+        dataDAOTest.save(obj);
     }
 
 

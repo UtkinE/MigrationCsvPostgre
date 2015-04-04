@@ -9,11 +9,46 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Inserter{
 
+    private static Integer getNumberFromFileName(File currentFile, Boolean itIsTsNumber){
+        String regExp, str = currentFile.getName();
+        Integer number = 0;
+        Pattern pattern;
+        Matcher matcher;
+        try {
+            if(!Pattern.matches(getPropFromProperties("PatternNameFile"),str)) {
+                return null;
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+       return number;
+
+    }
+
+    private static Boolean correctNameFile(File file){
+        try {
+            if(Pattern.matches(getPropFromProperties("PatternNameFile"),file.getName())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
     private static Set<File> getSetFiles(String str) {
         LinkedHashSet<File> setFile = new LinkedHashSet<File>();
         File oDirFile = new File(str);
@@ -32,18 +67,18 @@ public class Inserter{
 
         return setFile;
     }
-    private static String returnPathFromProperties() throws IOException{
-        String path = "";
+    private static String getPropFromProperties(String nameProperty) throws IOException{
+        String prop = "";
         Properties property = new Properties();
         File oFileConfig = new File("src/resources/property.properties");
         try {
             property.load(new FileReader(oFileConfig));
-            path = property.getProperty("Path");
+            prop = property.getProperty(nameProperty);
         }
         catch (IOException e){
             e.printStackTrace();
         }
-        return path;
+        return prop;
     }
     private static DataTS1 fillFieldsDataMens(List<String> list) throws Exception {
         DataTS1 dataTS1 = new DataTS1();
@@ -56,27 +91,27 @@ public class Inserter{
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(1));
-                dataTS1.setColumn1(oDouble);
+                dataTS1.setVoltage(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(2));
-                dataTS1.setColumn2(oDouble);
+                dataTS1.setThe_current(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(3));
-                dataTS1.setColumn3(oDouble);
+                dataTS1.setPower(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(4));
-                dataTS1.setColumn4(oDouble);
+                dataTS1.setGiven_energy(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(5));
-                dataTS1.setColumn5(oDouble);
+                dataTS1.setAccepted_energy(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -86,12 +121,14 @@ public class Inserter{
     }
     public static void main (String[] args) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        IDataServiceTest dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
+        IDataServiceTest<DataTS1> dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
         try {
-            LinkedHashSet<File> setFile = new LinkedHashSet<File>(getSetFiles(returnPathFromProperties()));
+            LinkedHashSet<File> setFile = new LinkedHashSet<File>(getSetFiles(getPropFromProperties("Path")));
             Iterator<File> iterator = setFile.iterator();
             while (iterator.hasNext()) {
-                Csv.Reader oReader = new Csv.Reader(new FileReader(iterator.next())).delimiter(';').ignoreComments(true);
+                File currentFile = iterator.next();
+                if (!correctNameFile(currentFile)){System.out.println("ERROR: Incorrect file name");continue;}
+                Csv.Reader oReader = new Csv.Reader(new FileReader(currentFile)).delimiter(';').ignoreComments(true);
                 while(true) {
                     try {
                         List<String> lineCSV = oReader.readLine();
@@ -129,7 +166,7 @@ public class Inserter {
         IDataMensService dataMensService = new DataMensServiceImpl();
         List<String> lineCSV = new LinkedList<String>(line);
         ts1 dataMens = new ts1();
-        dataMens.setId(1);
+        dataMens.setTs_id(1);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
             Date oDate = sdf.parse(lineCSV.get(0));
@@ -138,27 +175,27 @@ public class Inserter {
             e.printStackTrace();
         } try {
             Double oDouble = Double.parseDouble(lineCSV.get(1));
-            dataMens.setColumn1(oDouble);
+            dataMens.setVoltage(oDouble);
         } catch (Exception e) {
             e.printStackTrace();
         } try {
             Double oDouble = Double.parseDouble(lineCSV.get(2));
-            dataMens.setColumn2(oDouble);
+            dataMens.setThe_current(oDouble);
         } catch (Exception e) {
             e.printStackTrace();
         } try {
             Double oDouble = Double.parseDouble(lineCSV.get(3));
-            dataMens.setColumn3(oDouble);
+            dataMens.setPower(oDouble);
         } catch (Exception e) {
             e.printStackTrace();
         } try {
             Double oDouble = Double.parseDouble(lineCSV.get(4));
-            dataMens.setColumn4(oDouble);
+            dataMens.setGiven_energy(oDouble);
         } catch (Exception e) {
             e.printStackTrace();
         } try {
             Double oDouble = Double.parseDouble(lineCSV.get(5));
-            dataMens.setColumn5(oDouble);
+            dataMens.setAccepted_energy(oDouble);
         } catch (Exception e) {
             e.printStackTrace();
         } try {

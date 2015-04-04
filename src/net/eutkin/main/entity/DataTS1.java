@@ -5,55 +5,55 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "data_day")
+@Table(name = "data_")
 public class DataTS1 {
     @Id
-    @Column(name = "id")
-    @SequenceGenerator(name = "data_day_seq", sequenceName = "data_day_seq",allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "data_day_seq")
+    @Column(name = "ts_id")
+    @SequenceGenerator(name = "data_ts1_seq", sequenceName = "data_ts1_seq",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "data_ts1_seq")
     @NotNull
-    private Integer id;
+    private Integer ts_id;
 
     @Column(name = "time_mensuration")
     @NotNull
     private Date timeMensuration;
 
     @Column(name = "voltage")
-    private Double column1;
+    private Double voltage;
 
     @Column(name = "the_current")
-    private Double column2;
+    private Double the_current;
 
     @Column(name = "power")
-    private Double column3;
+    private Double power;
 
 
     @Column(name = "given_energy")
-    private Double column4;
+    private Double given_energy;
 
 
     @Column(name = "accepted_energy")
-    private Double column5;
+    private Double accepted_energy;
 
-    public void setId(Integer id) {this.id = id;}
-    public Integer getId() {return id;}
+    public void setTs_id(Integer ts_id) {this.ts_id = ts_id;}
+    public Integer getTs_id() {return ts_id;}
 
     public void setTimeMensuration(Date date) {this.timeMensuration = date;}
     public Date getTimeMensuration() {return timeMensuration;}
 
-    public void setColumn1(Double column1) {this.column1 = column1;}
-    public Double getColumn1() {return column1;}
+    public void setVoltage(Double voltage) {this.voltage = voltage;}
+    public Double getVoltage() {return voltage;}
 
-    public void setColumn2(Double column2) {this.column2 = column2;}
-    public Double getColumn2() {return column2;}
+    public void setThe_current(Double the_current) {this.the_current = the_current;}
+    public Double getThe_current() {return the_current;}
 
-    public void setColumn3(Double column3) {this.column3 = column3;}
-    public Double getColumn3() {return column3;}
+    public void setPower(Double power) {this.power = power;}
+    public Double getPower() {return power;}
 
-    public void setColumn4(Double column4) {this.column4 = column4;}
-    public Double getColumn4() {return column4;}
+    public void setGiven_energy(Double given_energy) {this.given_energy = given_energy;}
+    public Double getGiven_energy() {return given_energy;}
 
-    public void setColumn5(Double column5) {this.column5 = column5;}
-    public Double getColumn5() {return column5;}
+    public void setAccepted_energy(Double accepted_energy) {this.accepted_energy = accepted_energy;}
+    public Double getAccepted_energy() {return accepted_energy;}
 
 }

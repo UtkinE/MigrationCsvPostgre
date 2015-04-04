@@ -21,18 +21,18 @@
     <context:component-scan base-package="net.eutkin.main" />
 
 
-    <bean id="propertyConfigurer"
+    <bean ts_id="propertyConfigurer"
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
           p:location="/resources/jdbc.properties" />
 
-  <!--  <bean id="dataSource"
+  <!--  <bean ts_id="dataSource"
           class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close"
           p:driverClassName="${jdbc.driverClassName}"
           p:url="${jdbc.databaseurl}" p:username="${jdbc.username}"
           p:password="${jdbc.password}" />
 -->
 
-    <bean id="sessionFactory"
+    <bean ts_id="sessionFactory"
           class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
         <property name="configLocation">
@@ -50,7 +50,7 @@
     </bean>
 
     <tx:annotation-driven />
-    <bean id="transactionManager"
+    <bean ts_id="transactionManager"
           class="org.springframework.orm.hibernate3.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
