@@ -5,8 +5,8 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "data_")
-public class DataTS1 {
+@Table(name = "data_ts1")
+public class DataTS1 extends AbstractDataTS {
     @Id
     @Column(name = "ts_id")
     @SequenceGenerator(name = "data_ts1_seq", sequenceName = "data_ts1_seq",allocationSize = 1)
@@ -17,6 +17,14 @@ public class DataTS1 {
     @Column(name = "time_mensuration")
     @NotNull
     private Date timeMensuration;
+
+    @Column(name = "date_mensuration")
+    @NotNull
+    private Date dateMensuration;
+
+    @Column(name = "meter_id")
+    @NotNull
+    private Integer meter_id;
 
     @Column(name = "voltage")
     private Double voltage;
@@ -56,4 +64,19 @@ public class DataTS1 {
     public void setAccepted_energy(Double accepted_energy) {this.accepted_energy = accepted_energy;}
     public Double getAccepted_energy() {return accepted_energy;}
 
+    public Date getDateMensuration() {
+        return dateMensuration;
+    }
+
+    public void setDateMensuration(Date dateMensuration) {
+        this.dateMensuration = dateMensuration;
+    }
+
+    public Integer getMeter_id() {
+        return meter_id;
+    }
+
+    public void setMeter_id(Integer meter_id) {
+        this.meter_id = meter_id;
+    }
 }

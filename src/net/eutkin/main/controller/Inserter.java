@@ -9,7 +9,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
@@ -18,24 +17,17 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class Inserter{
 
     private static Integer getNumberFromFileName(File currentFile, Boolean itIsTsNumber){
-        String regExp, str = currentFile.getName();
+        String str = currentFile.getName();
+        str = str.substring(6);
         Integer number = 0;
-        Pattern pattern;
-        Matcher matcher;
-        try {
-            if(!Pattern.matches(getPropFromProperties("PatternNameFile"),str)) {
-                return null;
-            }
+        if(itIsTsNumber){
+            str = str.substring(0,3);
+            number = Integer.parseInt(str);
+        } else {
+            number = Integer.parseInt(str.substring(3,6));
         }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
-
-       return number;
-
+        return number;
     }
-
     private static Boolean correctNameFile(File file){
         try {
             if(Pattern.matches(getPropFromProperties("PatternNameFile"),file.getName())) {
@@ -83,10 +75,17 @@ public class Inserter{
     private static DataTS1 fillFieldsDataMens(List<String> list) throws Exception {
         DataTS1 dataTS1 = new DataTS1();
         if(list != null){
+            String[] str = list.get(0).split(" ");
             try {
-                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
-                Date oDate = sdf.parse(list.get(0));
+                SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
+                Date oDate = sdf.parse(str[1]);
                 dataTS1.setTimeMensuration(oDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } try {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+                Date oDate = sdf.parse(str[0]);
+                dataTS1.setDateMensuration(oDate);
             } catch (Exception e){
                 e.printStackTrace();
             } try {
@@ -115,6 +114,7 @@ public class Inserter{
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            dataTS1.setMeter_id(Integer.parseInt(list.get(6)));
         } else
             return null;
         return dataTS1;
@@ -133,6 +133,7 @@ public class Inserter{
                     try {
                         List<String> lineCSV = oReader.readLine();
                         if(lineCSV != null) {
+                            lineCSV.add(getNumberFromFileName(currentFile,false).toString());
                             dataServiceTest.save(fillFieldsDataMens(lineCSV));
                         } else {
                             break;

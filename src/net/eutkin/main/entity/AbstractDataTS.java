@@ -1,46 +1,26 @@
 package net.eutkin.main.entity;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Entity
-@Table(name = "data_day")
-public class DataTS2 extends AbstractDataTS {
-    @Id
-    @Column(name = "ts_id")
-    @SequenceGenerator(name = "data_ts2_seq", sequenceName = "data_ts2_seq",allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "data_ts2_seq")
-    @NotNull
+
+public abstract class AbstractDataTS {
+
     private Integer ts_id;
 
-    @Column(name = "time_mensuration")
-    @NotNull
     private Date timeMensuration;
 
-    @Column(name = "date_mensuration")
-    @NotNull
     private Date dateMensuration;
 
-    @Column(name = "meter_id")
-    @NotNull
     private Integer meter_id;
 
-    @Column(name = "voltage")
     private Double voltage;
 
-    @Column(name = "the_current")
     private Double the_current;
 
-    @Column(name = "power")
     private Double power;
 
-
-    @Column(name = "given_energy")
     private Double given_energy;
 
-
-    @Column(name = "accepted_energy")
     private Double accepted_energy;
 
     public void setTs_id(Integer ts_id) {this.ts_id = ts_id;}
