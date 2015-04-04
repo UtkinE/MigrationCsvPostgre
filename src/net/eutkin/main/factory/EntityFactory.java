@@ -5,9 +5,9 @@ import net.eutkin.main.entity.AbstractDataTS;
 import net.eutkin.main.entity.DataTS1;
 import net.eutkin.main.entity.DataTS2;
 
-public class EntityFactory<T> {
+public class EntityFactory {
     private int numTS;
-    EntityFactory(int numTS){
+    public EntityFactory(int numTS){
         this.numTS = numTS;
     }
     public AbstractDataTS getEntity(){

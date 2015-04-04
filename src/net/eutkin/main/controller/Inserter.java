@@ -1,7 +1,8 @@
 package net.eutkin.main.controller;
 
 import javenue.csv.Csv;
-import net.eutkin.main.entity.DataTS1;
+import net.eutkin.main.entity.AbstractDataTS;
+import net.eutkin.main.factory.EntityFactory;
 import net.eutkin.main.service.IDataServiceTest;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 
+import org.hibernate.JDBCException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Inserter{
@@ -72,8 +74,9 @@ public class Inserter{
         }
         return prop;
     }
-    private static DataTS1 fillFieldsDataMens(List<String> list) throws Exception {
-        DataTS1 dataTS1 = new DataTS1();
+    private static AbstractDataTS fillFieldsDataMens(List<String> list,File file) {
+        EntityFactory entityFactory = new EntityFactory(getNumberFromFileName(file,true));
+        AbstractDataTS dataTS1 = entityFactory.getEntity();
         if(list != null){
             String[] str = list.get(0).split(" ");
             try {
@@ -114,14 +117,14 @@ public class Inserter{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            dataTS1.setMeter_id(Integer.parseInt(list.get(6)));
+            dataTS1.setMeter_id(getNumberFromFileName(file, false));
         } else
             return null;
         return dataTS1;
     }
     public static void main (String[] args) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        IDataServiceTest<DataTS1> dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
+        IDataServiceTest<AbstractDataTS> dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
         try {
             LinkedHashSet<File> setFile = new LinkedHashSet<File>(getSetFiles(getPropFromProperties("Path")));
             Iterator<File> iterator = setFile.iterator();
@@ -129,22 +132,22 @@ public class Inserter{
                 File currentFile = iterator.next();
                 if (!correctNameFile(currentFile)){System.out.println("ERROR: Incorrect file name");continue;}
                 Csv.Reader oReader = new Csv.Reader(new FileReader(currentFile)).delimiter(';').ignoreComments(true);
-                while(true) {
-                    try {
-                        List<String> lineCSV = oReader.readLine();
-                        if(lineCSV != null) {
-                            lineCSV.add(getNumberFromFileName(currentFile,false).toString());
-                            dataServiceTest.save(fillFieldsDataMens(lineCSV));
-                        } else {
-                            break;
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                while(true) try {
+                    List<String> lineCSV = oReader.readLine();
+                    if (lineCSV != null) {
+                        dataServiceTest.save(fillFieldsDataMens(lineCSV, currentFile));
+                    } else {
+                        break;
                     }
+                } catch (JDBCException e) {
+                    e.getSQLException().getNextException().printStackTrace();
                 }
             }
         }
-        catch (Exception e){
+        catch (JDBCException e){
+            e.getSQLException().getNextException().printStackTrace();
+        }
+        catch (IOException e){
             e.printStackTrace();
         }
 

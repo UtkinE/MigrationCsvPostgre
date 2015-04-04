@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
-@Table(name = "data_day")
+@Table(name = "data_ts2")
 public class DataTS2 extends AbstractDataTS {
     @Id
     @Column(name = "ts_id")
@@ -67,7 +67,6 @@ public class DataTS2 extends AbstractDataTS {
     public Date getDateMensuration() {
         return dateMensuration;
     }
-
     public void setDateMensuration(Date dateMensuration) {
         this.dateMensuration = dateMensuration;
     }
@@ -75,7 +74,6 @@ public class DataTS2 extends AbstractDataTS {
     public Integer getMeter_id() {
         return meter_id;
     }
-
     public void setMeter_id(Integer meter_id) {
         this.meter_id = meter_id;
     }
