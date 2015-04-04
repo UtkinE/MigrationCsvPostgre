@@ -1,8 +1,8 @@
 package net.eutkin.main.service;
 
 
-import net.eutkin.main.entity.DataMens;
+import net.eutkin.main.entity.DataTS1;
 
 public interface IDataServiceTest {
-    public void save(DataMens dataMens);
+    public void save(DataTS1 dataTS1);
 }

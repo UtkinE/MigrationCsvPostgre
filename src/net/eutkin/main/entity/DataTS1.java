@@ -6,7 +6,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "data_day")
-public class DataMens {
+public class DataTS1 {
     @Id
     @Column(name = "id")
     @SequenceGenerator(name = "data_day_seq", sequenceName = "data_day_seq",allocationSize = 1)

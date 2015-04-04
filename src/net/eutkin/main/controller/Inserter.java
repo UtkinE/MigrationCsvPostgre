@@ -1,7 +1,7 @@
 package net.eutkin.main.controller;
 
 import javenue.csv.Csv;
-import net.eutkin.main.entity.DataMens;
+import net.eutkin.main.entity.DataTS1;
 import net.eutkin.main.service.IDataServiceTest;
 
 import java.io.File;
@@ -17,13 +17,19 @@ public class Inserter{
     private static Set<File> getSetFiles(String str) {
         LinkedHashSet<File> setFile = new LinkedHashSet<File>();
         File oDirFile = new File(str);
-        for (File currentFile : oDirFile.listFiles()) {
-            if (currentFile.isFile()) {
-                setFile.add(currentFile);
-            } else if (currentFile.isDirectory()) {
-                getSetFiles(currentFile.getAbsolutePath());
+        try {
+            for (File currentFile : oDirFile.listFiles()) {
+                if (currentFile.isFile()) {
+                    setFile.add(currentFile);
+                } else if (currentFile.isDirectory()) {
+                    getSetFiles(currentFile.getAbsolutePath());
+                }
             }
         }
+        catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
         return setFile;
     }
     private static String returnPathFromProperties() throws IOException{
@@ -39,44 +45,44 @@ public class Inserter{
         }
         return path;
     }
-    private static DataMens fillFieldsDataMens(List<String> list) throws Exception {
-        DataMens dataMens = new DataMens();
+    private static DataTS1 fillFieldsDataMens(List<String> list) throws Exception {
+        DataTS1 dataTS1 = new DataTS1();
         if(list != null){
             try {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
                 Date oDate = sdf.parse(list.get(0));
-                dataMens.setTimeMensuration(oDate);
+                dataTS1.setTimeMensuration(oDate);
             } catch (Exception e){
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(1));
-                dataMens.setColumn1(oDouble);
+                dataTS1.setColumn1(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(2));
-                dataMens.setColumn2(oDouble);
+                dataTS1.setColumn2(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(3));
-                dataMens.setColumn3(oDouble);
+                dataTS1.setColumn3(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(4));
-                dataMens.setColumn4(oDouble);
+                dataTS1.setColumn4(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             } try {
                 Double oDouble = Double.parseDouble(list.get(5));
-                dataMens.setColumn5(oDouble);
+                dataTS1.setColumn5(oDouble);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         } else
             return null;
-        return dataMens;
+        return dataTS1;
     }
     public static void main (String[] args) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -122,7 +128,7 @@ public class Inserter {
     public void parseLine(List<String> line) throws Exception {
         IDataMensService dataMensService = new DataMensServiceImpl();
         List<String> lineCSV = new LinkedList<String>(line);
-        DataMens dataMens = new DataMens();
+        ts1 dataMens = new ts1();
         dataMens.setId(1);
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");

@@ -1,7 +1,7 @@
 package net.eutkin.main.service;
 
 import net.eutkin.main.dao.IDataDAOTest;
-import net.eutkin.main.entity.DataMens;
+import net.eutkin.main.entity.DataTS1;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,8 +15,8 @@ public class DataServiceTest implements IDataServiceTest {
 
     @Override
     @Transactional
-    public void save(DataMens dataMens){
-        dataDAOTest.save(dataMens);
+    public void save(DataTS1 dataTS1){
+        dataDAOTest.save(dataTS1);
     }
 
 

@@ -23,7 +23,6 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="csv" />
-        <module name="CSV_1.1" />
       </profile>
     </annotationProcessing>
   </component>
