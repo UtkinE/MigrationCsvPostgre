@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import org.hibernate.JDBCException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Responsibility:
  * Insert new record in database
@@ -30,7 +32,7 @@ public class Inserter{
     private static Integer getIdFromFileName(File currentFile, Boolean itIsTsNumber){
         String str = currentFile.getName();
         str = str.substring(6);
-        Integer number = 0;
+        Integer number;
         if(itIsTsNumber){
             str = str.substring(0,3);
             number = Integer.parseInt(str);
@@ -46,11 +48,7 @@ public class Inserter{
      */
     private static Boolean validateFileName(File file){
         try {
-            if(Pattern.matches(getPropFromProperties("PatternNameFile"),file.getName())) {
-                return true;
-            } else {
-                return false;
-            }
+            return Pattern.matches(getPropFromProperties("PatternNameFile"), file.getName());
         }
         catch (IOException e){
             e.printStackTrace();
@@ -62,7 +60,7 @@ public class Inserter{
      * @param   path   path on csv file
      * @return  set csv files
      */
-    private static Set<File> getListFiles(String path) {
+    private static Set<File> getListFiles(String path) throws Exception {
         LinkedHashSet<File> setFile = new LinkedHashSet<File>();
         File oDirFile = new File(path);
         try {
@@ -74,15 +72,14 @@ public class Inserter{
                 }
             }
         }
-        catch (NullPointerException e){
+        catch (NullPointerException e) {
             e.printStackTrace();
         }
-
         return setFile;
     }
     /**
      * get property from file with properties
-     * @param   nameProperty
+     * @param   nameProperty    name of property in properties file
      * @return  property value
      * @throws  IOException
      */
@@ -158,19 +155,20 @@ public class Inserter{
      * get config Spring Framework,
      * call method for getting list file,
      *
-     * @param args
+     * @param args external parametrs, don't used
      */
     public static void main (String[] args) {
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
-        IDataServiceTest<AbstractDataTS> dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
+        IDataServiceTest dataServiceTest = (IDataServiceTest) ctx.getBean("entityService");
         try {
             LinkedHashSet<File> setFile = new LinkedHashSet<File>(getListFiles(getPropFromProperties("Path")));
-            Iterator<File> iterator = setFile.iterator();
-            while (iterator.hasNext()) {
-                File currentFile = iterator.next();
-                if (!validateFileName(currentFile)){System.out.println("ERROR: Incorrect file name");continue;}
+            for (File currentFile : setFile) {
+                if (!validateFileName(currentFile)) {
+                    System.out.println("ERROR: Incorrect file name");
+                    continue;
+                }
                 Csv.Reader oReader = new Csv.Reader(new FileReader(currentFile)).delimiter(';').ignoreComments(true);
-                while(true) try {
+                while (true) try {
                     List<String> lineCSV = oReader.readLine();
                     if (lineCSV != null) {
                         dataServiceTest.save(fillFieldsDataMens(lineCSV, currentFile));
@@ -182,17 +180,9 @@ public class Inserter{
                 }
             }
         }
-        catch (JDBCException e){
-            e.getSQLException().getNextException().printStackTrace();
-        }
-        catch (IOException e){
+        catch (Exception e){
             e.printStackTrace();
         }
 
-
-
-        System.out.println("end");
     }
-
-
 }
