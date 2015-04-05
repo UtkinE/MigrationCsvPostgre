@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
-import org.hibernate.JDBCException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * Responsibility:
@@ -103,7 +101,7 @@ public class Inserter{
      * @param   file  current csv file
      * @return  entity
      */
-    private static AbstractDataTS fillFieldsDataMens(List<String> list,File file) {
+    private static AbstractDataTS fillFieldsDataMens(List<String> list,File file) throws NumberFormatException{
         EntityFactory entityFactory = new EntityFactory(getIdFromFileName(file, true));
         AbstractDataTS dataTS1 = entityFactory.getEntity();
         if(list != null){
@@ -119,32 +117,32 @@ public class Inserter{
                 Date oDate = sdf.parse(str[0]);
                 dataTS1.setDateMensuration(oDate);
             } catch (Exception e){
-                e.printStackTrace();
+               throw new NumberFormatException();
             } try {
                 Double oDouble = Double.parseDouble(list.get(1));
                 dataTS1.setVoltage(oDouble);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new NumberFormatException();
             } try {
                 Double oDouble = Double.parseDouble(list.get(2));
                 dataTS1.setThe_current(oDouble);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new NumberFormatException();
             } try {
                 Double oDouble = Double.parseDouble(list.get(3));
                 dataTS1.setPower(oDouble);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new NumberFormatException();
             } try {
                 Double oDouble = Double.parseDouble(list.get(4));
                 dataTS1.setGiven_energy(oDouble);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new NumberFormatException();
             } try {
                 Double oDouble = Double.parseDouble(list.get(5));
                 dataTS1.setAccepted_energy(oDouble);
             } catch (Exception e) {
-                e.printStackTrace();
+               throw new NumberFormatException();
             }
             dataTS1.setMeter_id(getIdFromFileName(file, false));
         } else
@@ -171,18 +169,20 @@ public class Inserter{
                 while (true) try {
                     List<String> lineCSV = oReader.readLine();
                     if (lineCSV != null) {
-                        dataServiceTest.save(fillFieldsDataMens(lineCSV, currentFile));
+                        try {
+                            dataServiceTest.save(fillFieldsDataMens(lineCSV, currentFile));
+                        } catch (NumberFormatException e) {
+                            continue;
+                        }
                     } else {
                         break;
                     }
-                } catch (JDBCException e) {
-                    e.getSQLException().getNextException().printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             }
-        }
-        catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 }
