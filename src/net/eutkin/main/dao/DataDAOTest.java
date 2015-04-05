@@ -1,14 +1,12 @@
 package net.eutkin.main.dao;
 
-import net.eutkin.main.entity.DataTS1;
+import net.eutkin.main.entity.AbstractDataTS;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
-public class DataDAOTest<T> extends HibernateDaoSupport implements IDataDAOTest<T> {
-    //T obj;
+public class DataDAOTest extends HibernateDaoSupport implements IDataDAOTest {
 
-    //DataDAOTest(T obj){ this.obj = obj;}
     @Override
-    public void save(T obj) {
+    public void save(AbstractDataTS obj) {
         getHibernateTemplate().save(obj);
     }
 }
