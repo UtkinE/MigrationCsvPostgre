@@ -17,7 +17,8 @@ public class DataServiceTest implements IDataServiceTest {
     @Override
     @Transactional
     public void save(AbstractDataTS obj){
-        dataDAOTest.save(obj);
+        if (obj != null)
+            dataDAOTest.save(obj);
     }
 
 

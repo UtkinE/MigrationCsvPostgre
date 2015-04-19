@@ -4,12 +4,13 @@ package net.eutkin.main.factory;
 import net.eutkin.main.entity.*;
 
 public class EntityFactory {
-    private int numTS;
-    public EntityFactory(int numTS){
-        this.numTS = numTS;
-    }
-    public AbstractDataTS getEntity(){
-        switch (this.numTS){
+    /**
+     * create new instance of DataTS
+     * @param numTS
+     * @return
+     */
+    public AbstractDataTS getEntity(int numTS){
+        switch (numTS){
             case 1: return new DataTS1();
             case 2: return new DataTS2();
             case 3: return new DataTS3();

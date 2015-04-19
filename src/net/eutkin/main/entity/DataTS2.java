@@ -43,8 +43,8 @@ public class DataTS2 extends AbstractDataTS {
     @Column(name = "accepted_energy")
     private Double accepted_energy;
 
-    public void setTs_id(Integer ts_id) {this.ts_id = ts_id;}
-    public Integer getTs_id() {return ts_id;}
+    public void setRec_id(Integer ts_id) {this.ts_id = ts_id;}
+    public Integer getRec_id() {return ts_id;}
 
     public void setTimeMensuration(Date date) {this.timeMensuration = date;}
     public Date getTimeMensuration() {return timeMensuration;}

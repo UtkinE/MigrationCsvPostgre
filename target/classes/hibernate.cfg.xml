@@ -5,9 +5,12 @@
 
 <hibernate-configuration>
        <session-factory>
-              <mapping class="net.eutkin.main.entity.DataTS1" />
-              <mapping class="net.eutkin.main.entity.DataTS2" />
-
+           <mapping class="net.eutkin.main.entity.DataTS1" />
+           <mapping class="net.eutkin.main.entity.DataTS2" />
+           <mapping class="net.eutkin.main.entity.DataTS3" />
+           <mapping class="net.eutkin.main.entity.DataTS4" />
+           <mapping class="net.eutkin.main.entity.DataTS5" />
+           <mapping class="net.eutkin.main.entity.DataTS6" />
        </session-factory>
 
 </hibernate-configuration>
